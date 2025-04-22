@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AutoAttend - Live Attendance</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f2f2f2; }
+    h1 { color: #333; }
+    #log { background: white; padding: 1rem; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .entry { margin-bottom: 10px; padding: 8px; border-bottom: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h1>📋 AutoAttend - Attendance Log</h1>
+  <div id="log">Loading attendance...</div>
+
+  <script>
+    async function loadAttendance() {
+      try {
+        const res = await fetch('http://your-server-ip/view'); // 👈 Change to your server's IP/domain
+        const data = await res.json();
+        const log = document.getElementById('log');
+        log.innerHTML = '';
+        for (let rfid in data) {
+          const entry = document.createElement('div');
+          entry.className = 'entry';
+          entry.innerHTML = `<strong>RFID:</strong> ${rfid}<br><strong>Time:</strong> ${data[rfid]}`;
+          log.appendChild(entry);
+        }
+      } catch (err) {
+        document.getElementById('log').innerHTML = '❌ Error loading attendance';
+      }
+    }
+
+    loadAttendance();
+    setInterval(loadAttendance, 5000); // Refresh every 5 seconds
+  </script>
+</body>
+</html>
